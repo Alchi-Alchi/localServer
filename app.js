@@ -1,14 +1,17 @@
 const http = require ('http');
 const fs = require ('fs');
 const path = require ('path');
-const port = 3000;
+const port = 4000;
 const server = http.createServer ((req, res) => {
     res.setHeader ('Content-Type', 'text/html');
-    let createPath = (page) => path.resolve(__dirname, 'pages', `${page}.html`);
+    let createPath = (page) => path.resolve(__dirname, 'pages', `${page}.ejs`);
     let basePath = '';
     switch (req.url) {
         case '/':
-            basePath = createPath('auth');
+            basePath = createPath('index');
+            break;
+            case '/contacts':
+            basePath = createPath('contacts');
             break;
         default:
             basePath = createPath('error');
