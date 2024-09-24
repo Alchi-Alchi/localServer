@@ -11,16 +11,37 @@ mongoose
 .then((res) => console.log('Connected to DB'))
 .catch((error) => console.log(error));
 let createPath = (page) => path.resolve(__dirname, 'pages', `${page}.ejs`);
-app.listen (port, 'localhost', (error) => {
+app.listen (port, (error) => {
     error ? console.log (error): console.log (`listening ${port}`);
 });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(express.static('styles'));
 app.get('/', (req, res) => {
-    res.render(createPath('index'));
+    const title = 'Home';
+    res.render(createPath('index'), {title});
+});
+app.get('/contacts', (req, res) => {
+    const title = 'Contacts';
+    const contacts = [
+        {name: 'GitHub', link: 'https://github.com/Alchi-Alchi'}
+    ];
+    res.render(createPath('contacts'), {contacts, title});
+});
+app.get('/posts', (req, res) => {
+    const title = 'Posts';
+    res.render(createPath('posts'), {title});
+});
+app.get('/posts/:id', (req, res) => {
+    const title = 'Post';
+    res.render(createPath('post'), {title});
+});
+app.get('/add-post/', (req, res) => {
+    const title = 'Add';
+    res.render(createPath('add-post'), {title});
 });
 app.use((req, res) => {
+    const title = 'Error Page';
     res
     .status(404)
-    .render(createPath('error'));
+    .render(createPath('error'), {title});
 });
