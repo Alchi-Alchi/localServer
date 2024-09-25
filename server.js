@@ -15,6 +15,7 @@ app.listen (port, (error) => {
     error ? console.log (error): console.log (`listening ${port}`);
 });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+app.use(express.urlencoded({extended: false}));
 app.use(express.static('styles'));
 app.get('/', (req, res) => {
     const title = 'Home';
@@ -29,11 +30,38 @@ app.get('/contacts', (req, res) => {
 });
 app.get('/posts', (req, res) => {
     const title = 'Posts';
-    res.render(createPath('posts'), {title});
+    const posts = [
+        {
+            id: '1',
+            text: 'Lorem',
+            title: 'Title',
+            date: '25.09.2024',
+            author: 'Paul',
+        },
+    ];
+    res.render(createPath('posts'), {title, posts});
 });
 app.get('/posts/:id', (req, res) => {
     const title = 'Post';
-    res.render(createPath('post'), {title});
+    const post = {
+        id: '1',
+        text: 'Lorem',
+        title: 'Title',
+        date: '25.09.2024',
+        author: 'Paul',
+    };
+    res.render(createPath('post'), {title, post});
+});
+app.post('/add-post', (req, res) => {
+    const {title, author, text} = req.body;
+    const post = {
+        id: new Date(),
+        date: (new Date()).toLocaleDateString(),
+        title,
+        author,
+        text,
+    };
+    res.render(createPath('post'), {post, title});
 });
 app.get('/add-post/', (req, res) => {
     const title = 'Add';
